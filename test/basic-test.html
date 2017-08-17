@@ -1,0 +1,277 @@
+<!doctype html>
+<!--
+@license
+Copyright (c) 2015 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
+
+    <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+    <script src="../../web-component-tester/browser.js"></script>
+    <script src="../../iron-test-helpers/test-helpers.js"></script>
+    <link rel="import" href="../environment-selector.html">
+  </head>
+  <body>
+
+    <test-fixture id="basic">
+      <template>
+        <environment-selector></environment-selector>
+      </template>
+    </test-fixture>
+
+    <script>
+    /* global fixture, assert, sinon, TestHelpers */
+    suite('basic', function() {
+      var element;
+      test('Asks for a list of environemnts when attached', function() {
+        var spy = sinon.spy();
+        window.addEventListener('environment-list', spy);
+        element = fixture('basic');
+        assert.isTrue(spy.called);
+      });
+
+      test('Asks for a current environemnt when attached', function() {
+        var spy = sinon.spy();
+        window.addEventListener('environment-current', spy);
+        element = fixture('basic');
+        assert.isTrue(spy.called);
+      });
+
+      test('Fires selected-environment-changed event', function() {
+        var spy = sinon.spy();
+        window.addEventListener('selected-environment-changed', spy);
+        element = fixture('basic');
+        element.selected = 'test';
+        assert.isTrue(spy.called);
+      });
+    });
+
+    suite('environment-current', function() {
+      var element;
+      var handler;
+      var env = 'TEST';
+      setup(function() {
+        handler = function(e) {
+          e.preventDefault();
+          e.detail.value = env;
+        };
+        window.addEventListener('environment-current', handler);
+        element = fixture('basic');
+        TestHelpers.forceXIfStamp(element);
+      });
+
+      teardown(function() {
+        window.removeEventListener('environment-current', handler);
+      });
+
+      test('Selected is set', function() {
+        assert.equal(element.selected, env);
+      });
+    });
+
+    suite('environment-list', function() {
+      var element;
+      var handler;
+      var envs = [{
+        name: 'test-1',
+        id: 'test-1'
+      }, {
+        name: 'test-2',
+        id: 'test-2'
+      }];
+      setup(function() {
+        handler = function(e) {
+          e.preventDefault();
+          e.detail.value = Array.from(envs);
+        };
+        window.addEventListener('environment-list', handler);
+        element = fixture('basic');
+        TestHelpers.forceXIfStamp(element);
+      });
+
+      teardown(function() {
+        window.removeEventListener('environment-list', handler);
+      });
+
+      test('Environemnts are set', function() {
+        assert.lengthOf(element.environments, 2);
+      });
+    });
+
+    suite('environment-updated', function() {
+      var element;
+      var handler;
+      var envs = [{
+        name: 'test-1',
+        _id: 'test-1'
+      }, {
+        name: 'test-2',
+        _id: 'test-2'
+      }];
+      setup(function() {
+        handler = function(e) {
+          e.preventDefault();
+          e.detail.value = Array.from(envs);
+        };
+        window.addEventListener('environment-list', handler);
+        element = fixture('basic');
+        TestHelpers.forceXIfStamp(element);
+      });
+
+      teardown(function() {
+        window.removeEventListener('environment-list', handler);
+      });
+      // Imitates event sent by the manager
+      function update() {
+        var event = new CustomEvent('environment-updated', {
+          detail: {
+            value: {
+              name: 'test-updated',
+              _id: 'test-1'
+            }
+          },
+          bubbles: true,
+          composed: true
+        });
+        document.body.dispatchEvent(event);
+      }
+
+      test('Updates an environemnt', function() {
+        update();
+        assert.equal(element.environments[0].name, 'test-updated');
+      });
+
+      test('Updates selected environemnt', function() {
+        element.selected = 'test-1';
+        TestHelpers.forceXIfStamp(element);
+        update();
+        TestHelpers.forceXIfStamp(element);
+        assert.equal(element.selected, 'test-updated');
+      });
+    });
+
+    suite('environment-deleted', function() {
+      var element;
+      var handler;
+      var envs = [{
+        name: 'test-1',
+        _id: 'test-1'
+      }, {
+        name: 'test-2',
+        _id: 'test-2'
+      }];
+      setup(function() {
+        handler = function(e) {
+          e.preventDefault();
+          e.detail.value = Array.from(envs);
+        };
+        window.addEventListener('environment-list', handler);
+        element = fixture('basic');
+        TestHelpers.forceXIfStamp(element);
+      });
+
+      teardown(function() {
+        window.removeEventListener('environment-list', handler);
+      });
+      // Imitates event sent by the manager
+      function deleteEnv() {
+        var event = new CustomEvent('environment-deleted', {
+          detail: {
+            value: 'test-1'
+          },
+          bubbles: true,
+          composed: true
+        });
+        document.body.dispatchEvent(event);
+      }
+
+      test('Removed an environemnt', function() {
+        deleteEnv();
+        assert.lengthOf(element.environments, 1);
+      });
+
+      test('Removes only deleted environment', function() {
+        deleteEnv();
+        assert.equal(element.environments[0].name, 'test-2');
+      });
+
+      test('Sets default environment', function() {
+        element.selected = 'test-1';
+        deleteEnv();
+        TestHelpers.forceXIfStamp(element);
+        assert.equal(element.selected, 'default');
+      });
+    });
+
+    suite('environments-list-changed', function() {
+      var element;
+      var handler;
+      var envs = [{
+        name: 'test-1',
+        _id: 'test-1'
+      }, {
+        name: 'test-2',
+        _id: 'test-2'
+      }];
+      setup(function() {
+        handler = function(e) {
+          e.preventDefault();
+          e.detail.value = Array.from(envs);
+        };
+        window.addEventListener('environment-list', handler);
+        element = fixture('basic');
+        TestHelpers.forceXIfStamp(element);
+      });
+
+      teardown(function() {
+        window.removeEventListener('environment-list', handler);
+      });
+      // Imitates event sent by the manager
+      function updateEnv(list) {
+        var event = new CustomEvent('environments-list-changed', {
+          detail: {
+            value: list
+          },
+          bubbles: true,
+          composed: true
+        });
+        document.body.dispatchEvent(event);
+      }
+
+      test('Upodates the list', function() {
+        updateEnv([{
+          name: 'updated',
+          _id: 'updated'
+        }]);
+        assert.lengthOf(element.environments, 1);
+        assert.equal(element.environments[0].name, 'updated');
+      });
+
+      test('Sets selected to default', function() {
+        updateEnv([{
+          name: 'updated',
+          _id: 'updated'
+        }]);
+        assert.equal(element.selected, 'default');
+      });
+
+      test('Do not change selected if environment exists', function() {
+        element.selected = 'test-2';
+        updateEnv([{
+          name: 'test-2',
+          _id: 'test-2'
+        }]);
+        assert.equal(element.selected, 'test-2');
+      });
+    });
+    </script>
+
+  </body>
+</html>
