@@ -1,3 +1,13 @@
+<a name="0.1.1"></a>
+## [0.1.1](https://github.com/advanced-rest-client/environment-selector/compare/0.0.2...0.1.1) (2017-08-17)
+
+
+### Update
+
+* Bumped version for the release ([1091cb85eb71c9f972a0dc0fe0e48df4cf600013](https://github.com/advanced-rest-client/environment-selector/commit/1091cb85eb71c9f972a0dc0fe0e48df4cf600013))
+
+
+
 <a name="0.0.2"></a>
 ## 0.0.2 (2017-08-17)
 
