@@ -1,3 +1,9 @@
+<a name="0.1.2"></a>
+## [0.1.2](https://github.com/advanced-rest-client/environment-selector/compare/0.1.1...0.1.2) (2017-08-17)
+
+
+
+
 <a name="0.1.1"></a>
 ## [0.1.1](https://github.com/advanced-rest-client/environment-selector/compare/0.0.2...0.1.1) (2017-08-17)
 
