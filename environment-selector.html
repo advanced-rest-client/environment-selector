@@ -61,7 +61,7 @@ to style the control.
       @apply --environment-selector;
     }
     </style>
-    <paper-dropdown-menu label="Environment" no-label-float="[[noLabelFloat]]">
+    <paper-dropdown-menu label="Environment" no-label-float="[[noLabelFloat]]" dynamic-align>
       <paper-listbox class="dropdown-content" selected="{{selected}}" attr-for-selected="value">
         <paper-item value="default">Default</paper-item>
         <template is="dom-repeat" items="[[environments]]" id="envRepeater">

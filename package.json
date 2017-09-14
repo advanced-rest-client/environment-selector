@@ -1,6 +1,6 @@
 {
   "name": "environment-selector",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "license": "Apache-2.0 OR CC-BY-4.0",
   "description": "An element to select current variables environment",
   "devDependencies": {
