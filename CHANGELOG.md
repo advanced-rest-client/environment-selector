@@ -1,3 +1,13 @@
+<a name="0.1.3"></a>
+## [0.1.3](https://github.com/advanced-rest-client/environment-selector/compare/0.1.2...0.1.3) (2017-09-14)
+
+
+### Update
+
+* Added `dynamic-align` attribute to the dropdown ([65f0c1c1dea4934ccece208949e64623c7a28e3f](https://github.com/advanced-rest-client/environment-selector/commit/65f0c1c1dea4934ccece208949e64623c7a28e3f))
+
+
+
 <a name="0.1.2"></a>
 ## [0.1.2](https://github.com/advanced-rest-client/environment-selector/compare/0.1.1...0.1.2) (2017-08-17)
 
