@@ -1,3 +1,13 @@
+<a name="0.1.5"></a>
+## [0.1.5](https://github.com/advanced-rest-client/environment-selector/compare/0.1.3...0.1.5) (2017-10-02)
+
+
+### New
+
+* Added support for delete datastore event ([7c15e72a09d5297612b33ad5312fcd3063f984ca](https://github.com/advanced-rest-client/environment-selector/commit/7c15e72a09d5297612b33ad5312fcd3063f984ca))
+
+
+
 <a name="0.1.4"></a>
 ## [0.1.4](https://github.com/advanced-rest-client/environment-selector/compare/0.1.3...0.1.4) (2017-09-14)
 
