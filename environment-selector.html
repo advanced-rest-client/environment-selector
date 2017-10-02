@@ -111,6 +111,7 @@ to style the control.
       this.listen(window, 'environment-updated', '_envUpdatedHandler');
       this.listen(window, 'environments-list-changed', '_envListUpdatedHandler');
       this.listen(window, 'selected-environment-changed', '_envChangedHandler');
+      this.listen(window, 'datastore-destroyed', '_datastoreDeleteHandler');
     },
 
     detached: function() {
@@ -118,6 +119,7 @@ to style the control.
       this.unlisten(window, 'environment-updated', '_envUpdatedHandler');
       this.unlisten(window, 'environments-list-changed', '_envListUpdatedHandler');
       this.unlisten(window, 'selected-environment-changed', '_envChangedHandler');
+      this.unlisten(window, 'datastore-destroyed', '_datastoreDeleteHandler');
     },
 
     // Handler for the `environment-deleted` event.
@@ -206,6 +208,21 @@ to style the control.
       this.fire('selected-environment-changed', {
         value: selected
       });
+    },
+    // Handler for the `datastore-destroyed` event
+    _datastoreDeleteHandler: function(e) {
+      var db = e.detail.datastore;
+      var name = 'variables-environments';
+      if (typeof db === 'string') {
+        if (db !== name) {
+          return;
+        }
+      }
+      if (db.indexOf(name) === -1) {
+        return;
+      }
+      this.set('environments', undefined);
+      this.set('selected', 'default');
     },
     /**
      * Fires `environment-list` event to get a list of environments.

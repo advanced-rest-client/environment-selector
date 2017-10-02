@@ -60,6 +60,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         <input type="text" name="environemt" placeholder="Environment name">
         <button type="submit" name="remove">Remove</button>
       </form>
+
+      <h3>Empulate database destroy</h3>
+      <button id="dataDelete">Send event</button>
     </div>
   </div>
 
@@ -95,6 +98,17 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     }
   });
 
+  document.getElementById('dataDelete')
+  .addEventListener('click', function() {
+    var event = new CustomEvent('datastore-destroyed', {
+      detail: {
+        datastore: 'variables-environments'
+      },
+      bubbles: true,
+      composed: true
+    });
+    document.body.dispatchEvent(event);
+  });
   document.getElementById('formDelete')
   .addEventListener('submit', function(e) {
     e.preventDefault();
