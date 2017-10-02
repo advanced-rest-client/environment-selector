@@ -271,7 +271,54 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         assert.equal(element.selected, 'test-2');
       });
     });
-    </script>
 
+    suite('datastore-destroyed', function() {
+      var element;
+      var handler;
+      var envs = [{
+        name: 'test-1',
+        _id: 'test-1'
+      }, {
+        name: 'test-2',
+        _id: 'test-2'
+      }];
+      setup(function() {
+        handler = function(e) {
+          e.preventDefault();
+          e.detail.value = Array.from(envs);
+        };
+        window.addEventListener('environment-list', handler);
+        element = fixture('basic');
+        TestHelpers.forceXIfStamp(element);
+      });
+
+      teardown(function() {
+        window.removeEventListener('environment-list', handler);
+      });
+      // Imitates event sent by the manager
+      function deleteEnv() {
+        var event = new CustomEvent('datastore-destroyed', {
+          detail: {
+            datastore: 'variables-environments'
+          },
+          bubbles: true,
+          composed: true
+        });
+        document.body.dispatchEvent(event);
+      }
+
+      test('environments is undefined', function() {
+        deleteEnv();
+        assert.isUndefined(element.environments);
+      });
+
+      test('Sets default environment', function() {
+        element.selected = 'test-1';
+        deleteEnv();
+        TestHelpers.forceXIfStamp(element);
+        assert.equal(element.selected, 'default');
+      });
+    });
+    </script>
   </body>
 </html>
