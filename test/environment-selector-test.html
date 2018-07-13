@@ -1,0 +1,320 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, minimum-scale=1, initial-scale=1, user-scalable=yes">
+  <title>environment-selector test</title>
+  <script src="../../webcomponentsjs/webcomponents-loader.js"></script>
+  <script src="../../web-component-tester/browser.js"></script>
+  <link rel="import" href="../environment-selector.html">
+</head>
+<body>
+  <test-fixture id="Basic">
+    <template>
+      <environment-selector></environment-selector>
+    </template>
+  </test-fixture>
+
+  <script>
+  suite('environment-selector', () => {
+    let element;
+
+    test('Asks for a list of environemnts when attached', function() {
+      const spy = sinon.spy();
+      window.addEventListener('environment-list', spy);
+      element = fixture('Basic');
+      assert.isTrue(spy.called);
+    });
+
+    test('Asks for a current environemnt when attached', function() {
+      const spy = sinon.spy();
+      window.addEventListener('environment-current', spy);
+      element = fixture('Basic');
+      assert.isTrue(spy.called);
+    });
+
+    test('Fires selected-environment-changed event', function() {
+      const spy = sinon.spy();
+      window.addEventListener('selected-environment-changed', spy);
+      element = fixture('Basic');
+      element.selected = 'test';
+      assert.isTrue(spy.called);
+    });
+  });
+
+  suite('environment-current', function() {
+    let element;
+    let handler;
+    const env = 'TEST';
+    setup(function(done) {
+      handler = function(e) {
+        e.preventDefault();
+        e.detail.value = env;
+      };
+      window.addEventListener('environment-current', handler);
+      element = fixture('Basic');
+      flush(() => done());
+    });
+
+    teardown(function() {
+      window.removeEventListener('environment-current', handler);
+    });
+
+    test('Selected is set', function() {
+      assert.equal(element.selected, env);
+    });
+  });
+
+  suite('environment-list', function() {
+    let element;
+    let handler;
+    const envs = [{
+      name: 'test-1',
+      id: 'test-1'
+    }, {
+      name: 'test-2',
+      id: 'test-2'
+    }];
+    setup(function(done) {
+      handler = function(e) {
+        e.preventDefault();
+        e.detail.value = Array.from(envs);
+      };
+      window.addEventListener('environment-list', handler);
+      element = fixture('Basic');
+      flush(() => done());
+    });
+
+    teardown(function() {
+      window.removeEventListener('environment-list', handler);
+    });
+
+    test('Environemnts are set', function() {
+      assert.lengthOf(element.environments, 2);
+    });
+  });
+
+  suite('environment-updated', function() {
+    let element;
+    let handler;
+    const envs = [{
+      name: 'test-1',
+      _id: 'test-1'
+    }, {
+      name: 'test-2',
+      _id: 'test-2'
+    }];
+    setup(function(done) {
+      handler = function(e) {
+        e.preventDefault();
+        e.detail.value = Array.from(envs);
+      };
+      window.addEventListener('environment-list', handler);
+      element = fixture('Basic');
+      flush(() => done());
+    });
+
+    teardown(function() {
+      window.removeEventListener('environment-list', handler);
+    });
+    // Imitates event sent by the manager
+    function update() {
+      const e = new CustomEvent('environment-updated', {
+        detail: {
+          value: {
+            name: 'test-updated',
+            _id: 'test-1'
+          }
+        },
+        bubbles: true,
+        composed: true
+      });
+      document.body.dispatchEvent(e);
+    }
+
+    test('Updates an environemnt', function() {
+      update();
+      assert.equal(element.environments[0].name, 'test-updated');
+    });
+
+    test('Updates selected environemnt', function(done) {
+      element.selected = 'test-1';
+      flush(() => {
+        update();
+        flush(() => {
+          assert.equal(element.selected, 'test-updated');
+          done();
+        });
+      });
+    });
+  });
+
+  suite('environment-deleted', function() {
+    let element;
+    let handler;
+    const envs = [{
+      name: 'test-1',
+      _id: 'test-1'
+    }, {
+      name: 'test-2',
+      _id: 'test-2'
+    }];
+    setup(function(done) {
+      handler = function(e) {
+        e.preventDefault();
+        e.detail.value = Array.from(envs);
+      };
+      window.addEventListener('environment-list', handler);
+      element = fixture('Basic');
+      flush(() => done());
+    });
+
+    teardown(function() {
+      window.removeEventListener('environment-list', handler);
+    });
+    // Imitates event sent by the manager
+    function deleteEnv() {
+      const e = new CustomEvent('environment-deleted', {
+        detail: {
+          value: 'test-1'
+        },
+        bubbles: true,
+        composed: true
+      });
+      document.body.dispatchEvent(e);
+    }
+
+    test('Removed an environemnt', function() {
+      deleteEnv();
+      assert.lengthOf(element.environments, 1);
+    });
+
+    test('Removes only deleted environment', function() {
+      deleteEnv();
+      assert.equal(element.environments[0].name, 'test-2');
+    });
+
+    test('Sets default environment', function(done) {
+      element.selected = 'test-1';
+      deleteEnv();
+      flush(() => {
+        assert.equal(element.selected, 'default');
+        done();
+      });
+    });
+  });
+
+  suite('environments-list-changed', function() {
+    let element;
+    let handler;
+    const envs = [{
+      name: 'test-1',
+      _id: 'test-1'
+    }, {
+      name: 'test-2',
+      _id: 'test-2'
+    }];
+    setup(function(done) {
+      handler = function(e) {
+        e.preventDefault();
+        e.detail.value = Array.from(envs);
+      };
+      window.addEventListener('environment-list', handler);
+      element = fixture('Basic');
+      flush(() => done());
+    });
+
+    teardown(function() {
+      window.removeEventListener('environment-list', handler);
+    });
+    // Imitates event sent by the manager
+    function updateEnv(list) {
+      const e = new CustomEvent('environments-list-changed', {
+        detail: {
+          value: list
+        },
+        bubbles: true,
+        composed: true
+      });
+      document.body.dispatchEvent(e);
+    }
+
+    test('Upodates the list', function() {
+      updateEnv([{
+        name: 'updated',
+        _id: 'updated'
+      }]);
+      assert.lengthOf(element.environments, 1);
+      assert.equal(element.environments[0].name, 'updated');
+    });
+
+    test('Sets selected to default', function() {
+      updateEnv([{
+        name: 'updated',
+        _id: 'updated'
+      }]);
+      assert.equal(element.selected, 'default');
+    });
+
+    test('Do not change selected if environment exists', function() {
+      element.selected = 'test-2';
+      updateEnv([{
+        name: 'test-2',
+        _id: 'test-2'
+      }]);
+      assert.equal(element.selected, 'test-2');
+    });
+  });
+
+  suite('datastore-destroyed', function() {
+    let element;
+    let handler;
+    const envs = [{
+      name: 'test-1',
+      _id: 'test-1'
+    }, {
+      name: 'test-2',
+      _id: 'test-2'
+    }];
+    setup(function(done) {
+      handler = function(e) {
+        e.preventDefault();
+        e.detail.value = Array.from(envs);
+      };
+      window.addEventListener('environment-list', handler);
+      element = fixture('Basic');
+      flush(() => done());
+    });
+
+    teardown(function() {
+      window.removeEventListener('environment-list', handler);
+    });
+    // Imitates event sent by the manager
+    function deleteEnv() {
+      const e = new CustomEvent('datastore-destroyed', {
+        detail: {
+          datastore: 'variables-environments'
+        },
+        bubbles: true,
+        composed: true
+      });
+      document.body.dispatchEvent(e);
+    }
+
+    test('environments is undefined', function() {
+      deleteEnv();
+      assert.isUndefined(element.environments);
+    });
+
+    test('Sets default environment', function(done) {
+      element.selected = 'test-1';
+      deleteEnv();
+      flush(() => {
+        assert.equal(element.selected, 'default');
+        done();
+      });
+    });
+  });
+  </script>
+</body>
+</html>
