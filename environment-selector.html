@@ -15,6 +15,7 @@ the License.
 <link rel="import" href="../paper-item/paper-item.html">
 <link rel="import" href="../paper-dropdown-menu/paper-dropdown-menu.html">
 <link rel="import" href="../paper-listbox/paper-listbox.html">
+<link rel="import" href="../variables-consumer-mixin/variables-consumer-mixin.html">
 <dom-module id="environment-selector">
   <template>
     <style>
@@ -68,14 +69,15 @@ the License.
    *
    * Use variables for `paper-dropdown-menu`, `paper-listbox` and `paper-item`
    * to style the control.
-   * 
+   *
    * @polymer
    * @customElement
    * @memberof UiElements
    * @demo demo/index.html
+   * @appliesMixin ArcComponents.VariablesConsumerMixin
    */
-  class EnvironmentSelector extends Polymer.Element {
-    static get is() { return 'environment-selector';}
+  class EnvironmentSelector extends ArcComponents.VariablesConsumerMixin(Polymer.Element) {
+    static get is() {return 'environment-selector';}
     static get properties() {
       return {
         /**
@@ -89,101 +91,27 @@ the License.
           type: String,
           notify: true,
           observer: '_environmentChanged'
-        },
-        /**
-         * List of available environemnts.
-         */
-        environments: Array
+        }
       };
     }
 
     constructor() {
       super();
-      this._envDeletedHandler = this._envDeletedHandler.bind(this);
-      this._envUpdatedHandler = this._envUpdatedHandler.bind(this);
-      this._envListUpdatedHandler = this._envListUpdatedHandler.bind(this);
       this._envChangedHandler = this._envChangedHandler.bind(this);
-      this._datastoreDeleteHandler = this._datastoreDeleteHandler.bind(this);
     }
 
     connectedCallback() {
       super.connectedCallback();
-      this.updateCurrentEnvironment();
-      this.refreshEnvironments();
-      window.addEventListener('environment-deleted', this._envDeletedHandler);
-      window.addEventListener('environment-updated', this._envUpdatedHandler);
-      window.addEventListener('environments-list-changed', this._envListUpdatedHandler);
       window.addEventListener('selected-environment-changed', this._envChangedHandler);
-      window.addEventListener('datastore-destroyed', this._datastoreDeleteHandler);
     }
 
     disconnectedCallback() {
       super.disconnectedCallback();
-      window.removeEventListener('environment-deleted', this._envDeletedHandler);
-      window.removeEventListener('environment-updated', this._envUpdatedHandler);
-      window.removeEventListener('environments-list-changed', this._envListUpdatedHandler);
       window.removeEventListener('selected-environment-changed', this._envChangedHandler);
-      window.removeEventListener('datastore-destroyed', this._datastoreDeleteHandler);
-    }
-
-    // Handler for the `environment-deleted` event.
-    _envDeletedHandler(e) {
-      if (e.cancelable || !this.environments) {
-        return;
-      }
-      const id = e.detail.value;
-      const index = this.environments.findIndex((item) => item._id === id);
-      if (!~index) {
-        this.$.envRepeater.render();
-        return;
-      }
-      const setDefault = this.get(['environments', index, '_id']) === id;
-      this.splice('environments', index, 1);
-      this.$.envRepeater.render();
-      if (setDefault) {
-        this.set('selected', 'default');
-      }
-    }
-    // Handler for the `environment-updated` event.
-    _envUpdatedHandler(e) {
-      if (e.cancelable) {
-        return;
-      }
-      const env = e.detail.value;
-      if (!this.environments) {
-        this.set('environments', [env]);
-        this.$.envRepeater.render();
-        return;
-      }
-      const index = this.environments.findIndex((item) => item._id === env._id);
-      if (index === -1) {
-        this.push('environments', env);
-      } else {
-        const updateSelcted = this.get(['environments', index, '_id']) === env._id;
-        this.set(['environments', index], env);
-        if (updateSelcted) {
-          this.set('selected', env.name);
-        }
-      }
-      this.$.envRepeater.render();
-    }
-    // Handler for the `environments-list-changed` event.
-    _envListUpdatedHandler(e) {
-      if (e.cancelable) {
-        return;
-      }
-      const incoming = e.detail.value;
-      const current = this.selected;
-      const index = (incoming || []).findIndex((item) => item.name === current);
-      this.set('environments', e.detail.value);
-      this.$.envRepeater.render();
-      if (index === -1) {
-        this.set('selected', 'default');
-      }
     }
     // Handler for the `selected-environment-changed` event.
     _envChangedHandler(e) {
-      if (e.cancelable || e.target === this) {
+      if (e.cancelable || e.composedPath()[0] === this) {
         return;
       }
       this.__cancelEnvChange = true;
@@ -210,56 +138,6 @@ the License.
           value: selected
         }
       }));
-    }
-    // Handler for the `datastore-destroyed` event
-    _datastoreDeleteHandler(e) {
-      const db = e.detail.datastore;
-      const name = 'variables-environments';
-      if (typeof db === 'string') {
-        if (db !== name) {
-          return;
-        }
-      }
-      if (db.indexOf(name) === -1) {
-        return;
-      }
-      this.set('environments', undefined);
-      this.set('selected', 'default');
-    }
-    /**
-     * Fires `environment-list` event to get a list of environments.
-     * If the event has been handled (cancelled) then it sets value of the
-     * `environemnts` property from event's `detail.value` property.
-     */
-    refreshEnvironments() {
-      const e = new CustomEvent('environment-list', {
-        bubbles: true,
-        composed: true,
-        cancelable: true,
-        detail: {}
-      });
-      this.dispatchEvent(e);
-      if (e.defaultPrevented) {
-        this.set('environments', e.detail.value);
-      }
-    }
-    /**
-     * Requests information about currently selected environment.
-     * It fires `environment-current` custom event. If the event is cancelled
-     * then it sets the `selected` value from event's `detail.value`
-     * property.
-     */
-    updateCurrentEnvironment() {
-      const e = new CustomEvent('environment-current', {
-        bubbles: true,
-        composed: true,
-        cancelable: true,
-        detail: {}
-      });
-      this.dispatchEvent(e);
-      if (e.defaultPrevented) {
-        this.set('selected', e.detail.value);
-      }
     }
     /**
      * Fired when selected environment changed.
