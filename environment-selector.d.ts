@@ -12,6 +12,7 @@
 /// <reference path="../paper-item/paper-item.d.ts" />
 /// <reference path="../paper-dropdown-menu/paper-dropdown-menu.d.ts" />
 /// <reference path="../paper-listbox/paper-listbox.d.ts" />
+/// <reference path="../variables-consumer-mixin/variables-consumer-mixin.d.ts" />
 
 declare namespace UiElements {
 
@@ -51,7 +52,9 @@ declare namespace UiElements {
    * Use variables for `paper-dropdown-menu`, `paper-listbox` and `paper-item`
    * to style the control.
    */
-  class EnvironmentSelector extends Polymer.Element {
+  class EnvironmentSelector extends
+    ArcComponents.VariablesConsumerMixin(
+    Polymer.Element) {
 
     /**
      * Set to make selector's label dissapear after selection has been made.
@@ -62,28 +65,8 @@ declare namespace UiElements {
      * Selected environment.
      */
     selected: string|null|undefined;
-
-    /**
-     * List of available environemnts.
-     */
-    environments: any[]|null|undefined;
     connectedCallback(): void;
     disconnectedCallback(): void;
-
-    /**
-     * Handler for the `environment-deleted` event.
-     */
-    _envDeletedHandler(e: any): void;
-
-    /**
-     * Handler for the `environment-updated` event.
-     */
-    _envUpdatedHandler(e: any): void;
-
-    /**
-     * Handler for the `environments-list-changed` event.
-     */
-    _envListUpdatedHandler(e: any): void;
 
     /**
      * Handler for the `selected-environment-changed` event.
@@ -94,26 +77,6 @@ declare namespace UiElements {
      * Handler for the `selected` property change
      */
     _environmentChanged(selected: any): void;
-
-    /**
-     * Handler for the `datastore-destroyed` event
-     */
-    _datastoreDeleteHandler(e: any): void;
-
-    /**
-     * Fires `environment-list` event to get a list of environments.
-     * If the event has been handled (cancelled) then it sets value of the
-     * `environemnts` property from event's `detail.value` property.
-     */
-    refreshEnvironments(): void;
-
-    /**
-     * Requests information about currently selected environment.
-     * It fires `environment-current` custom event. If the event is cancelled
-     * then it sets the `selected` value from event's `detail.value`
-     * property.
-     */
-    updateCurrentEnvironment(): void;
   }
 }
 
