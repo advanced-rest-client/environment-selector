@@ -1,7 +1,7 @@
 {
   "name": "environment-selector",
   "description": "An element to select current variables environment",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "license": "Apache-2.0",
   "authors": [
     "Pawel Psztyc",
@@ -22,7 +22,7 @@
     "paper-item": "PolymerElements/paper-item#^2.0.0",
     "paper-dropdown-menu": "PolymerElements/paper-dropdown-menu#^2.0.0",
     "paper-listbox": "PolymerElements/paper-listbox#^2.0.0",
-    "variables-consumer-mixin": "advanced-rest-client/variables-consumer-mixin#2.0.0-preview"
+    "variables-consumer-mixin": "advanced-rest-client/variables-consumer-mixin#^2.0.0"
   },
   "devDependencies": {
     "iron-component-page": "PolymerElements/iron-component-page#^3.0.1",
