@@ -217,17 +217,66 @@
           }
         },
         {
+          "name": "_dataImportHandler",
+          "description": "Handler for `data-imported` cutom event.\nRefreshes environments list.",
+          "privacy": "protected",
+          "sourceRange": {
+            "file": "../variables-consumer-mixin/variables-consumer-mixin.html",
+            "start": {
+              "line": 122,
+              "column": 4
+            },
+            "end": {
+              "line": 125,
+              "column": 5
+            }
+          },
+          "metadata": {},
+          "params": [],
+          "return": {
+            "type": "void"
+          },
+          "inheritedFrom": "ArcComponents.VariablesConsumerMixin"
+        },
+        {
+          "name": "_onDatabaseDestroy",
+          "description": "Handler for the `datastore-destroyed` custom event.",
+          "privacy": "protected",
+          "sourceRange": {
+            "file": "../variables-consumer-mixin/variables-consumer-mixin.html",
+            "start": {
+              "line": 130,
+              "column": 4
+            },
+            "end": {
+              "line": 149,
+              "column": 5
+            }
+          },
+          "metadata": {},
+          "params": [
+            {
+              "name": "e",
+              "type": "CustomEvent"
+            }
+          ],
+          "return": {
+            "type": "void"
+          },
+          "inheritedFrom": "ArcComponents.VariablesConsumerMixin"
+        },
+        {
           "name": "_initializeVariables",
           "description": "Asks variables manager for current environment and variables.\n\nNote, At the moment of initialization the manager may not be in the DOM.\nIn this case the initialization fails. However, when the manager is\ninitialized it dispatched events to update variables and environments.",
           "privacy": "protected",
           "sourceRange": {
             "file": "../variables-consumer-mixin/variables-consumer-mixin.html",
             "start": {
-              "line": 119,
+              "line": 157,
               "column": 4
             },
             "end": {
-              "line": 124,
+              "line": 164,
               "column": 5
             }
           },
@@ -245,11 +294,11 @@
           "sourceRange": {
             "file": "../variables-consumer-mixin/variables-consumer-mixin.html",
             "start": {
-              "line": 130,
+              "line": 170,
               "column": 4
             },
             "end": {
-              "line": 150,
+              "line": 190,
               "column": 5
             }
           },
@@ -273,11 +322,11 @@
           "sourceRange": {
             "file": "../variables-consumer-mixin/variables-consumer-mixin.html",
             "start": {
-              "line": 155,
+              "line": 195,
               "column": 4
             },
             "end": {
-              "line": 182,
+              "line": 222,
               "column": 5
             }
           },
@@ -295,11 +344,11 @@
           "sourceRange": {
             "file": "../variables-consumer-mixin/variables-consumer-mixin.html",
             "start": {
-              "line": 189,
+              "line": 229,
               "column": 4
             },
             "end": {
-              "line": 191,
+              "line": 231,
               "column": 5
             }
           },
@@ -323,11 +372,11 @@
           "sourceRange": {
             "file": "../variables-consumer-mixin/variables-consumer-mixin.html",
             "start": {
-              "line": 197,
+              "line": 237,
               "column": 4
             },
             "end": {
-              "line": 199,
+              "line": 239,
               "column": 5
             }
           },
@@ -350,18 +399,19 @@
           "privacy": "protected",
           "sourceRange": {
             "start": {
-              "line": 112,
+              "line": 116,
               "column": 4
             },
             "end": {
-              "line": 119,
+              "line": 123,
               "column": 5
             }
           },
           "metadata": {},
           "params": [
             {
-              "name": "e"
+              "name": "e",
+              "type": "CustomEvent"
             }
           ],
           "return": {
@@ -375,11 +425,11 @@
           "sourceRange": {
             "file": "../variables-consumer-mixin/variables-consumer-mixin.html",
             "start": {
-              "line": 215,
+              "line": 258,
               "column": 4
             },
             "end": {
-              "line": 225,
+              "line": 268,
               "column": 5
             }
           },
@@ -402,11 +452,11 @@
           "sourceRange": {
             "file": "../variables-consumer-mixin/variables-consumer-mixin.html",
             "start": {
-              "line": 231,
+              "line": 274,
               "column": 4
             },
             "end": {
-              "line": 250,
+              "line": 293,
               "column": 5
             }
           },
@@ -429,11 +479,11 @@
           "sourceRange": {
             "file": "../variables-consumer-mixin/variables-consumer-mixin.html",
             "start": {
-              "line": 256,
+              "line": 299,
               "column": 4
             },
             "end": {
-              "line": 266,
+              "line": 309,
               "column": 5
             }
           },
@@ -456,11 +506,11 @@
           "sourceRange": {
             "file": "../variables-consumer-mixin/variables-consumer-mixin.html",
             "start": {
-              "line": 272,
+              "line": 315,
               "column": 4
             },
             "end": {
-              "line": 278,
+              "line": 321,
               "column": 5
             }
           },
@@ -485,11 +535,11 @@
           "sourceRange": {
             "file": "../variables-consumer-mixin/variables-consumer-mixin.html",
             "start": {
-              "line": 284,
+              "line": 327,
               "column": 4
             },
             "end": {
-              "line": 297,
+              "line": 340,
               "column": 5
             }
           },
@@ -512,11 +562,11 @@
           "sourceRange": {
             "file": "../variables-consumer-mixin/variables-consumer-mixin.html",
             "start": {
-              "line": 303,
+              "line": 346,
               "column": 4
             },
             "end": {
-              "line": 320,
+              "line": 363,
               "column": 5
             }
           },
@@ -538,22 +588,50 @@
           "privacy": "protected",
           "sourceRange": {
             "start": {
-              "line": 121,
+              "line": 128,
               "column": 4
             },
             "end": {
-              "line": 140,
+              "line": 141,
               "column": 5
             }
           },
           "metadata": {},
           "params": [
             {
-              "name": "selected"
+              "name": "selected",
+              "type": "String"
             }
           ],
           "return": {
             "type": "void"
+          }
+        },
+        {
+          "name": "_dispatchChange",
+          "description": "Dispatches `selected-environment-changed` custom event",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 147,
+              "column": 4
+            },
+            "end": {
+              "line": 157,
+              "column": 5
+            }
+          },
+          "metadata": {},
+          "params": [
+            {
+              "name": "value",
+              "type": "String",
+              "description": "New value"
+            }
+          ],
+          "return": {
+            "type": "CustomEvent",
+            "desc": "Dispatched event"
           }
         }
       ],
@@ -571,7 +649,7 @@
           "column": 2
         },
         "end": {
-          "line": 147,
+          "line": 164,
           "column": 3
         }
       },

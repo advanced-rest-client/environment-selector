@@ -65,6 +65,114 @@
       });
     });
   });
+
+  suite('_envChangedHandler()', () => {
+    let element;
+    setup(function() {
+      element = fixture('Basic');
+    });
+
+    test('Does nothing when event is cancelable', () => {
+      element._envChangedHandler({
+        cancelable: true
+      });
+      assert.isUndefined(element.selected);
+    });
+
+    test('Does nothing when dispatched by self', () => {
+      element._envChangedHandler({
+        cancelable: false,
+        composedPath: () => [element]
+      });
+      assert.isUndefined(element.selected);
+    });
+
+    test('Sets selected property', () => {
+      element._envChangedHandler({
+        cancelable: false,
+        composedPath: () => [],
+        detail: {
+          value: 'test'
+        }
+      });
+      assert.equal(element.selected, 'test');
+    });
+  });
+
+  suite('_environmentChanged()', () => {
+    let element;
+    setup(function() {
+      element = fixture('Basic');
+    });
+
+    test('Does nothing when __cancelEnvChange is set', () => {
+      element.__cancelEnvChange = true;
+      const spy = sinon.spy(element, '_dispatchChange');
+      element._environmentChanged();
+      assert.isFalse(spy.called);
+    });
+
+    test('Does nothing when environment is undefined', () => {
+      const spy = sinon.spy(element, '_dispatchChange');
+      element._environmentChanged();
+      assert.isFalse(spy.called);
+    });
+
+    test('Sets environment to undefined when value is null', () => {
+      element.selected = null;
+      const spy = sinon.spy(element, '_dispatchChange');
+      element._environmentChanged(null);
+      assert.isUndefined(element.selected);
+      assert.isFalse(spy.called);
+    });
+
+    test('Calls _dispatchChange() otherwise', () => {
+      const spy = sinon.spy(element, '_dispatchChange');
+      element._environmentChanged('test');
+      assert.isTrue(spy.called);
+    });
+  });
+
+  suite('_dispatchChange()', () => {
+    let element;
+    setup(function() {
+      element = fixture('Basic');
+    });
+
+    const evDetail = 'test-value';
+
+    test('Dispatches an event', () => {
+      const spy = sinon.spy();
+      element.addEventListener('selected-environment-changed', spy);
+      element._dispatchChange(evDetail);
+      assert.isTrue(spy.called);
+    });
+
+    test('Returns the event', () => {
+      const e = element._dispatchChange(evDetail);
+      assert.typeOf(e, 'customevent');
+    });
+
+    test('Event is not cancelable', () => {
+      const e = element._dispatchChange(evDetail);
+      assert.isFalse(e.cancelable);
+    });
+
+    test('Event is composed', () => {
+      const e = element._dispatchChange(evDetail);
+      assert.isTrue(e.composed);
+    });
+
+    test('Event bubbles', () => {
+      const e = element._dispatchChange(evDetail);
+      assert.isTrue(e.bubbles);
+    });
+
+    test('Event has detail', () => {
+      const e = element._dispatchChange(evDetail);
+      assert.equal(e.detail.value, evDetail);
+    });
+  });
   </script>
 </body>
 </html>

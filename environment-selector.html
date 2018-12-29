@@ -109,7 +109,11 @@ the License.
       super.disconnectedCallback();
       window.removeEventListener('selected-environment-changed', this._envChangedHandler);
     }
-    // Handler for the `selected-environment-changed` event.
+
+    /**
+     * Handler for the `selected-environment-changed` event.
+     * @param {CustomEvent} e
+     */
     _envChangedHandler(e) {
       if (e.cancelable || e.composedPath()[0] === this) {
         return;
@@ -118,7 +122,10 @@ the License.
       this.set('selected', e.detail.value);
       this.__cancelEnvChange = false;
     }
-    // Handler for the `selected` property change
+    /**
+     * Handler for the `selected` property change
+     * @param {String} selected
+     */
     _environmentChanged(selected) {
       if (this.__cancelEnvChange) {
         // the change has been caused by the external source
@@ -131,13 +138,23 @@ the License.
       if (selected === undefined) {
         return;
       }
-      this.dispatchEvent(new CustomEvent('selected-environment-changed', {
+      this._dispatchChange(selected);
+    }
+    /**
+     * Dispatches `selected-environment-changed` custom event
+     * @param {String} value New value
+     * @return {CustomEvent} Dispatched event
+     */
+    _dispatchChange(value) {
+      const e = new CustomEvent('selected-environment-changed', {
         bubbles: true,
         composed: true,
         detail: {
-          value: selected
+          value
         }
-      }));
+      });
+      this.dispatchEvent(e);
+      return e;
     }
     /**
      * Fired when selected environment changed.
