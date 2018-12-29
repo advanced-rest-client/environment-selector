@@ -2,25 +2,30 @@
 
 [![Published on webcomponents.org](https://img.shields.io/badge/webcomponents.org-published-blue.svg)](https://www.webcomponents.org/element/advanced-rest-client/environment-selector)
 
-# environment-selector
+An element to select current variables environment.
+*
+Renders a material design dropdown with list of available environments.
+It always render `default` environment.
 
-An element to select current variables environment
+It should be used with combination of:
+-   [variables-manager](https://github.com/advanced-rest-client/variables-manager)
+-   [arc-models/variables-model](https://github.com/advanced-rest-client/arc-models)
 
-<!---
-```
-<custom-element-demo>
-  <template>
-    <link rel="import" href="environment-selector.html">
-    <next-code-block></next-code-block>
-  </template>
-</custom-element-demo>
-```
--->
+to handle `environment-list` and `environment-current` custom events.
+
+### Example
 
 ```html
 <environment-selector></environment-selector>
 ```
 
+```javascript
+document.queryElement('environment-selector')
+.addEventListener('selected-environment-changed', (e) => {
+  console.log(e.detail.value); // Selected environment
+});
+```
+
 ### API components
 
-This components is a part of API components ecosystem: https://elements.advancedrestclient.com/
+This components is a part of [API components ecosystem](https://elements.advancedrestclient.com/)

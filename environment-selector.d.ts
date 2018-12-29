@@ -25,12 +25,6 @@ declare namespace UiElements {
    * Renders a material design dropdown with list of available environments.
    * It always render environment **Default** (value `default`).
    *
-   * It should be used with
-   * [variables-manager](https://github.com/advanced-rest-client/variables-manager)
-   * element or other element that handles `environment-list`
-   * and `environment-current` custom events. See manager's
-   * description for more information.
-   *
    * ### Example
    *
    * ```html
@@ -40,7 +34,7 @@ declare namespace UiElements {
    * ```javascript
    * document.queryElement('environment-selector')
    * .addEventListener('selected-environment-changed', (e) => {
-   *  console.log(e.detail.value); // Selected environment
+   *    console.log(e.detail.value); // Selected environment
    * });
    * ```
    *
