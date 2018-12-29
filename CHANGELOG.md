@@ -1,3 +1,21 @@
+<a name="2.0.0"></a>
+# [2.0.0](https://github.com/advanced-rest-client/environment-selector/compare/0.1.3...2.0.0) (2018-12-29)
+
+
+### Docs
+
+* Updating docs ([f268cb1802f6612bdd292654416bbb24a1571847](https://github.com/advanced-rest-client/environment-selector/commit/f268cb1802f6612bdd292654416bbb24a1571847))
+
+### New
+
+* Added support for delete datastore event ([7c15e72a09d5297612b33ad5312fcd3063f984ca](https://github.com/advanced-rest-client/environment-selector/commit/7c15e72a09d5297612b33ad5312fcd3063f984ca))
+
+### Update
+
+* Upgrade to Polymer 2.0 ([e526ab0532878646dc4b888362847dcffae2f283](https://github.com/advanced-rest-client/environment-selector/commit/e526ab0532878646dc4b888362847dcffae2f283))
+
+
+
 <a name="0.1.5"></a>
 ## [0.1.5](https://github.com/advanced-rest-client/environment-selector/compare/0.1.3...0.1.5) (2017-10-02)
 
