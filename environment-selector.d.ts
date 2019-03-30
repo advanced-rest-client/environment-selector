@@ -5,17 +5,11 @@
  *   https://github.com/Polymer/tools/tree/master/packages/gen-typescript-declarations
  *
  * To modify these typings, edit the source file(s):
- *   environment-selector.html
+ *   environment-selector.js
  */
 
 
 // tslint:disable:variable-name Describing an API that's defined elsewhere.
-
-/// <reference path="../polymer/types/polymer-element.d.ts" />
-/// <reference path="../paper-item/paper-item.d.ts" />
-/// <reference path="../paper-dropdown-menu/paper-dropdown-menu.d.ts" />
-/// <reference path="../paper-listbox/paper-listbox.d.ts" />
-/// <reference path="../variables-consumer-mixin/variables-consumer-mixin.d.ts" />
 
 declare namespace UiElements {
 
@@ -40,17 +34,11 @@ declare namespace UiElements {
    *
    * ### Styling
    *
-   * `<environment-selector>` provides the following custom properties and mixins for styling:
-   *
-   * Custom property | Description | Default
-   * ----------------|-------------|----------
-   * `--environment-selector` | Mixin applied to the element | `{}`
-   *
    * Use variables for `paper-dropdown-menu`, `paper-listbox` and `paper-item`
    * to style the control.
    */
   class EnvironmentSelector extends
-    ArcComponents.VariablesConsumerMixin(
+    VariablesConsumerMixin(
     Object) {
 
     /**
@@ -85,6 +73,11 @@ declare namespace UiElements {
   }
 }
 
-interface HTMLElementTagNameMap {
-  "environment-selector": UiElements.EnvironmentSelector;
+declare global {
+
+  interface HTMLElementTagNameMap {
+    "environment-selector": UiElements.EnvironmentSelector;
+  }
 }
+
+export {};

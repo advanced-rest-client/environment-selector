@@ -4,12 +4,13 @@
   <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1, user-scalable=yes">
   <title>environment-selector demo</title>
   <script src="../../../@webcomponents/webcomponentsjs/webcomponents-loader.js"></script>
+  <script src="../../../web-animations-js/web-animations-next.min.js"></script>
+  <script src="../../../pouchdb/dist/pouchdb.js"></script>
+
   <script type="module" src="../../../@polymer/iron-demo-helpers/demo-pages-shared-styles.js"></script>
   <script type="module" src="../../../@polymer/iron-demo-helpers/demo-snippet.js"></script>
-  <script type="module" src="../../../@polymer/neon-animation/web-animations.js"></script>
-  <script type="module" src="../../../app-pouchdb/pouchdb.js"></script>
-  <script type="module" src="../../../variables-manager/variables-manager.js"></script>
-  <script type="module" src="../../../arc-models/variables-model.js"></script>
+  <script type="module" src="../../../@advanced-rest-client/variables-manager/variables-manager.js"></script>
+  <script type="module" src="../../../@advanced-rest-client/arc-models/variables-model.js"></script>
   <script type="module" src="../environment-selector.js"></script>
   <custom-style>
     <style include="demo-pages-shared-styles">
@@ -53,7 +54,7 @@
     </div>
   </div>
 
-  <script type="module">
+  <script>
   document.getElementById('form')
   .addEventListener('submit', function(e) {
     e.preventDefault();
@@ -96,6 +97,7 @@
     });
     document.body.dispatchEvent(e);
   });
+
   document.getElementById('formDelete')
   .addEventListener('submit', function(e) {
     e.preventDefault();
@@ -133,7 +135,7 @@
     if (ev.defaultPrevented) {
       e.target.elements.environemt.value = '';
     } else {
-      window.alert('Manager not in the DOM');
+      window.alert('Model not in the DOM');
     }
   });
   </script>

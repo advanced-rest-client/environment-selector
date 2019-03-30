@@ -12,17 +12,20 @@
   "version": "3.0.0-preview.1",
   "license": "Apache-2.0",
   "devDependencies": {
+    "@advanced-rest-client/arc-models": "^3.0.0-preview.2",
+    "@advanced-rest-client/variables-manager": "^3.0.0-preview.1",
     "@polymer/gen-typescript-declarations": "^1.6.0",
     "@polymer/iron-component-page": "^4.0.0",
     "@polymer/iron-demo-helpers": "^3.0.0",
     "@polymer/iron-test-helpers": "^3.0.0",
-    "@webcomponents/webcomponentsjs": "^2.0.0",
-    "web-animations-js": "^2.3.1",
     "@polymer/test-fixture": "^4.0.2",
+    "@webcomponents/webcomponentsjs": "^2.0.0",
     "chai": "^4.2.0",
     "mocha": "^5.2.0",
+    "pouchdb": "^7.0.0",
     "sinon": "^7.2.3",
-    "wct-mocha": "^1.0.0"
+    "wct-mocha": "^1.0.0",
+    "web-animations-js": "^2.3.1"
   },
   "main": "environment-selector.js",
   "scripts": {
@@ -44,9 +47,10 @@
     "The Advanced REST client authors <arc@mulesoft.com>"
   ],
   "dependencies": {
-    "@polymer/polymer": "^3.0.0",
-    "@polymer/paper-item": "^3.0.0",
+    "@advanced-rest-client/variables-consumer-mixin": "^3.0.0-preview.1",
     "@polymer/paper-dropdown-menu": "^3.0.0",
-    "@polymer/paper-listbox": "^3.0.0"
+    "@polymer/paper-item": "^3.0.0",
+    "@polymer/paper-listbox": "^3.0.0",
+    "@polymer/polymer": "^3.0.0"
   }
 }
