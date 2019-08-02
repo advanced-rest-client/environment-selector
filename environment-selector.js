@@ -11,12 +11,11 @@ WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 License for the specific language governing permissions and limitations under
 the License.
 */
-import {PolymerElement} from '../../@polymer/polymer/polymer-element.js';
-import {html} from '../../@polymer/polymer/lib/utils/html-tag.js';
-import {VariablesConsumerMixin} from '../../@advanced-rest-client/variables-consumer-mixin/variables-consumer-mixin.js';
-import '../../@polymer/paper-item/paper-item.js';
-import '../../@polymer/paper-dropdown-menu/paper-dropdown-menu.js';
-import '../../@polymer/paper-listbox/paper-listbox.js';
+import { LitElement, html, css } from 'lit-element';
+import { VariablesConsumerMixin } from '@advanced-rest-client/variables-consumer-mixin/variables-consumer-mixin.js';
+import '@polymer/paper-item/paper-item.js';
+import '@polymer/paper-dropdown-menu/paper-dropdown-menu.js';
+import '@polymer/paper-listbox/paper-listbox.js';
 /**
  * An element to select current variables environment.
  *
@@ -47,23 +46,30 @@ import '../../@polymer/paper-listbox/paper-listbox.js';
  * @demo demo/index.html
  * @appliesMixin VariablesConsumerMixin
  */
-class EnvironmentSelector extends VariablesConsumerMixin(PolymerElement) {
-  static get template() {
-    return html`
-    <style>
-    :host {
+class EnvironmentSelector extends VariablesConsumerMixin(LitElement) {
+  static get styles() {
+    return css`:host {
       display: block;
-    }
-    </style>
-    <paper-dropdown-menu label="Environment" no-label-float="[[noLabelFloat]]" dynamic-align="">
-      <paper-listbox slot="dropdown-content" selected="{{selected}}" attr-for-selected="value">
+    }`;
+  }
+
+  render() {
+    const { noLabelFloat, selected, environments, opened } = this;
+    const hasEnvs = !!(environments && environments.length);
+    const ariaOpened = opened === true ? 'true' : 'false';
+    return html`
+    <paper-dropdown-menu
+      label="Environment"
+      aria-label="Select one of defined environments in the dropdown"
+      aria-expanded="${ariaOpened}"
+      ?no-label-float="${noLabelFloat}"
+      dynamic-align
+      @opened-changed="${this._handleOpened}">
+      <paper-listbox slot="dropdown-content" .selected="${selected}" attr-for-selected="value" @selected-changed="${this._handleSelection}">
         <paper-item value="default">Default</paper-item>
-        <template is="dom-repeat" items="[[environments]]" id="envRepeater">
-          <paper-item value\$="[[item.name]]">[[item.name]]</paper-item>
-        </template>
+        ${hasEnvs ? environments.map((item) => html`<paper-item value="${item.name}">${item.name}</paper-item>`) : undefined}
       </paper-listbox>
-    </paper-dropdown-menu>
-`;
+    </paper-dropdown-menu>`;
   }
 
   static get properties() {
@@ -71,16 +77,52 @@ class EnvironmentSelector extends VariablesConsumerMixin(PolymerElement) {
       /**
        * Set to make selector's label dissapear after selection has been made.
        */
-      noLabelFloat: Boolean,
+      noLabelFloat: { type: Boolean },
       /**
        * Selected environment.
        */
-      selected: {
-        type: String,
-        notify: true,
-        observer: '_environmentChanged'
-      }
+      selected: { type: String },
+      /**
+       * True when the dropdown is opened. It can be used to change the state.
+       */
+      opened: { tyle: Boolean }
     };
+  }
+
+  get selected() {
+    return this._selected;
+  }
+
+  set selected(value) {
+    const old = this._selected;
+    if (old === value) {
+      return;
+    }
+    this._selected = value;
+    this.requestUpdate('selected', old);
+    this._environmentChanged(value);
+    this.dispatchEvent(new CustomEvent('selected-changed', {
+      detail: {
+        value
+      }
+    }));
+  }
+
+  get onenvironment() {
+    return this._onenvironment;
+  }
+
+  set onenvironment(value) {
+    const key = '_onenvironment';
+    if (this[key]) {
+      this.removeEventListener('selected-environment-changed', this[key]);
+    }
+    if (typeof value !== 'function') {
+      this[key] = null;
+      return;
+    }
+    this[key] = value;
+    this.addEventListener('selected-environment-changed', value);
   }
 
   constructor() {
@@ -89,12 +131,18 @@ class EnvironmentSelector extends VariablesConsumerMixin(PolymerElement) {
   }
 
   connectedCallback() {
-    super.connectedCallback();
+    /* istanbul ignore else */
+    if (super.connectedCallback) {
+      super.connectedCallback();
+    }
     window.addEventListener('selected-environment-changed', this._envChangedHandler);
   }
 
   disconnectedCallback() {
-    super.disconnectedCallback();
+    /* istanbul ignore else */
+    if (super.disconnectedCallback) {
+      super.disconnectedCallback();
+    }
     window.removeEventListener('selected-environment-changed', this._envChangedHandler);
   }
 
@@ -107,7 +155,7 @@ class EnvironmentSelector extends VariablesConsumerMixin(PolymerElement) {
       return;
     }
     this.__cancelEnvChange = true;
-    this.set('selected', e.detail.value);
+    this.selected = e.detail.value;
     this.__cancelEnvChange = false;
   }
   /**
@@ -120,7 +168,7 @@ class EnvironmentSelector extends VariablesConsumerMixin(PolymerElement) {
       return;
     }
     if (selected === null) {
-      this.set('selected', undefined);
+      this.selected = undefined;
       return;
     }
     if (selected === undefined) {
@@ -143,6 +191,14 @@ class EnvironmentSelector extends VariablesConsumerMixin(PolymerElement) {
     });
     this.dispatchEvent(e);
     return e;
+  }
+
+  _handleSelection(e) {
+    this.selected = e.detail.value;
+  }
+
+  _handleOpened(e) {
+    this.opened = e.detail.value;
   }
   /**
    * Fired when selected environment changed.

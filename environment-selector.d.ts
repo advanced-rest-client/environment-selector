@@ -10,6 +10,11 @@
 
 
 // tslint:disable:variable-name Describing an API that's defined elsewhere.
+// tslint:disable:no-any describes the API as best we are able today
+
+import {LitElement, html, css} from 'lit-element';
+
+import {VariablesConsumerMixin} from '@advanced-rest-client/variables-consumer-mixin/variables-consumer-mixin.js';
 
 declare namespace UiElements {
 
@@ -42,14 +47,20 @@ declare namespace UiElements {
     Object) {
 
     /**
+     * Selected environment.
+     */
+    selected: string|null|undefined;
+    onenvironment: any;
+
+    /**
      * Set to make selector's label dissapear after selection has been made.
      */
     noLabelFloat: boolean|null|undefined;
 
     /**
-     * Selected environment.
+     * True when the dropdown is opened. It can be used to change the state.
      */
-    selected: string|null|undefined;
+    opened: any;
     connectedCallback(): void;
     disconnectedCallback(): void;
 
@@ -57,6 +68,7 @@ declare namespace UiElements {
      * Handler for the `selected-environment-changed` event.
      */
     _envChangedHandler(e: CustomEvent|null): void;
+    render(): any;
 
     /**
      * Handler for the `selected` property change
@@ -70,6 +82,8 @@ declare namespace UiElements {
      * @returns Dispatched event
      */
     _dispatchChange(value: String|null): CustomEvent|null;
+    _handleSelection(e: any): void;
+    _handleOpened(e: any): void;
   }
 }
 
@@ -79,5 +93,3 @@ declare global {
     "environment-selector": UiElements.EnvironmentSelector;
   }
 }
-
-export {};

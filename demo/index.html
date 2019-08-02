@@ -1,143 +1,17 @@
-<!DOCTYPE html><html><head>
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
   <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1, user-scalable=yes">
   <title>environment-selector demo</title>
-  <script src="../../../@webcomponents/webcomponentsjs/webcomponents-loader.js"></script>
-  <script src="../../../web-animations-js/web-animations-next.min.js"></script>
-  <script src="../../../pouchdb/dist/pouchdb.js"></script>
-
-  <script type="module" src="../../../@polymer/iron-demo-helpers/demo-pages-shared-styles.js"></script>
-  <script type="module" src="../../../@polymer/iron-demo-helpers/demo-snippet.js"></script>
-  <script type="module" src="../../../@advanced-rest-client/variables-manager/variables-manager.js"></script>
-  <script type="module" src="../../../@advanced-rest-client/arc-models/variables-model.js"></script>
-  <script type="module" src="../environment-selector.js"></script>
-  <custom-style>
-    <style include="demo-pages-shared-styles">
-    </style>
-  </custom-style>
+  <script src="../node_modules/web-animations-js/web-animations.min.js"></script>
 </head>
-<body unresolved="">
-  <variables-manager></variables-manager>
-  <variables-model></variables-model>
 
-  <div class="vertical-section-container centered">
-    <h3>The `environment-selector`</h3>
-    <demo-snippet>
-      <template>
-        <environment-selector></environment-selector>
-      </template>
-    </demo-snippet>
-
-    <h3>No floating label</h3>
-    <demo-snippet>
-      <template>
-        <environment-selector no-label-float=""></environment-selector>
-      </template>
-    </demo-snippet>
-
-    <div class="editor">
-      <h3>Add environment</h3>
-      <form method="get" id="form">
-        <input type="text" name="environemt" placeholder="Environment name">
-        <button type="submit" name="save">Add</button>
-      </form>
-
-      <h3>Remove environment</h3>
-      <form method="get" id="formDelete">
-        <input type="text" name="environemt" placeholder="Environment name">
-        <button type="submit" name="remove">Remove</button>
-      </form>
-
-      <h3>Emulate database destroy</h3>
-      <button id="dataDelete">Send event</button>
-    </div>
-  </div>
-
-  <script>
-  document.getElementById('form')
-  .addEventListener('submit', function(e) {
-    e.preventDefault();
-    const value = e.target.elements.environemt.value;
-    if (!value) {
-      return;
-    }
-    const lowerName = name.toLowerCase();
-    if (lowerName === 'default') {
-      return;
-    }
-    const obj = {
-      name: value,
-      created: Date.now()
-    };
-    const event = new CustomEvent('environment-updated', {
-      detail: {
-        value: obj
-      },
-      bubbles: true,
-      composed: true,
-      cancelable: true
-    });
-    document.body.dispatchEvent(event);
-    if (event.defaultPrevented) {
-      e.target.elements.environemt.value = '';
-    } else {
-      window.alert('Manager not in the DOM');
-    }
-  });
-
-  document.getElementById('dataDelete')
-  .addEventListener('click', function() {
-    const e = new CustomEvent('datastore-destroyed', {
-      detail: {
-        datastore: 'variables-environments'
-      },
-      bubbles: true,
-      composed: true
-    });
-    document.body.dispatchEvent(e);
-  });
-
-  document.getElementById('formDelete')
-  .addEventListener('submit', function(e) {
-    e.preventDefault();
-    const value = e.target.elements.environemt.value;
-    if (!value) {
-      return;
-    }
-    const lowerName = name.toLowerCase();
-    if (lowerName === 'default') {
-      return;
-    }
-
-    const envs = document.querySelector('environment-selector').environments;
-    if (!envs.find) {
-      window.alert('Your browser is ancient! Get another one.');
-      return;
-    }
-    const oldLowerCase = value.toLowerCase();
-    const item = envs.find(function(i) {
-      return i.name.toLowerCase() === oldLowerCase;
-    });
-    if (!item) {
-      window.alert('The environment is not created.');
-      return;
-    }
-    const ev = new CustomEvent('environment-deleted', {
-      detail: {
-        id: item._id
-      },
-      bubbles: true,
-      composed: true,
-      cancelable: true
-    });
-    document.body.dispatchEvent(ev);
-    if (ev.defaultPrevented) {
-      e.target.elements.environemt.value = '';
-    } else {
-      window.alert('Model not in the DOM');
-    }
-  });
-  </script>
+<body class="styled">
+  <div id="demo"></div>
+  <script type="module" src="./index.js"></script>
 </body>
+
 </html>

@@ -4,10 +4,9 @@
 
 [![Published on webcomponents.org](https://img.shields.io/badge/webcomponents.org-published-blue.svg)](https://www.webcomponents.org/element/advanced-rest-client/environment-selector)
 
-An element to select current variables environment.
+An element to select current variables environment. Used with Advanced REST Client.
 
-Renders a material design dropdown with list of available environments.
-It always render `default` environment.
+Renders a material design dropdown with list of available environments. It always renders `default` environment.
 
 It should be used with combination of:
 
@@ -16,18 +15,7 @@ It should be used with combination of:
 
 to handle `environment-list` and `environment-current` custom events.
 
-### Example
-
-```html
-<environment-selector></environment-selector>
-```
-
-```javascript
-document.queryElement('environment-selector')
-.addEventListener('selected-environment-changed', (e) => {
-  console.log(e.detail.value); // Selected environment
-});
-```
+Note, it is more convenient to listen on change events on the manager instead of this element. The selector announces new environment to the manager and the manager refreshes the state.
 
 ### API components
 
@@ -46,48 +34,60 @@ npm install --save @advanced-rest-client/environment-selector
 <html>
   <head>
     <script type="module">
-      import './node_odules/@advanced-rest-client/environment-selector/environment-selector.js';
+      import '@advanced-rest-client/environment-selector/environment-selector.js';
+      import '@advanced-rest-client/variables-manager/variables-manager.js';
     </script>
   </head>
   <body>
+    <variables-manager></variables-manager>
     <environment-selector></environment-selector>
+    <script>
+    document.queryElement('environment-selector').onenvironment = (e) => {
+      console.log(e.detail.value); // Selected environment
+    };
+    </script>
   </body>
 </html>
 ```
 
-### In a Polymer 3 element
+### In a LitElement template
 
-```js
-import {PolymerElement, html} from './node_odules/@polymer/polymer';
-import './node_odules/@advanced-rest-client/environment-selector/environment-selector.js';
+```javascript
+import { LitElement, html } from 'lit-element';
+import '@advanced-rest-client/environment-selector/environment-selector.js';
+import '@advanced-rest-client/variables-manager/variables-manager.js';
 
-class SampleElement extends PolymerElement {
-  static get template() {
+class SampleElement extends LitElement {
+  render() {
     return html`
-    <environment-selector></environment-selector>
+    <variables-manager></variables-manager>
+    <environment-selector @selected-environment-changed="${this._envChanged}"></environment-selector>
     `;
+  }
+
+  _envChanged(e) {
+    this.currentEnvironment = e.detail.environment;
   }
 }
 customElements.define('sample-element', SampleElement);
 ```
 
-### Installation
+### Development
 
 ```sh
 git clone https://github.com/advanced-rest-client/environment-selector
-cd api-url-editor
+cd environment-selector
 npm install
-npm install -g polymer-cli
 ```
 
 ### Running the demo locally
 
 ```sh
-polymer serve --npm
-open http://127.0.0.1:<port>/demo/
+npm start
 ```
 
 ### Running the tests
+
 ```sh
-polymer test --npm
+npm test
 ```
