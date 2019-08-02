@@ -92,3 +92,7 @@
 
 
 
+# [3.0.0](https://github.com/advanced-rest-client/environment-selector/compare/0.1.3...3.0.0) (2019-08-02)
+
+
+
