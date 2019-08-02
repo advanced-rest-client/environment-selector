@@ -5,17 +5,16 @@
  *   https://github.com/Polymer/tools/tree/master/packages/gen-typescript-declarations
  *
  * To modify these typings, edit the source file(s):
- *   environment-selector.html
+ *   environment-selector.js
  */
 
 
 // tslint:disable:variable-name Describing an API that's defined elsewhere.
+// tslint:disable:no-any describes the API as best we are able today
 
-/// <reference path="../polymer/types/polymer-element.d.ts" />
-/// <reference path="../paper-item/paper-item.d.ts" />
-/// <reference path="../paper-dropdown-menu/paper-dropdown-menu.d.ts" />
-/// <reference path="../paper-listbox/paper-listbox.d.ts" />
-/// <reference path="../variables-consumer-mixin/variables-consumer-mixin.d.ts" />
+import {LitElement, html, css} from 'lit-element';
+
+import {VariablesConsumerMixin} from '@advanced-rest-client/variables-consumer-mixin/variables-consumer-mixin.js';
 
 declare namespace UiElements {
 
@@ -40,18 +39,18 @@ declare namespace UiElements {
    *
    * ### Styling
    *
-   * `<environment-selector>` provides the following custom properties and mixins for styling:
-   *
-   * Custom property | Description | Default
-   * ----------------|-------------|----------
-   * `--environment-selector` | Mixin applied to the element | `{}`
-   *
    * Use variables for `paper-dropdown-menu`, `paper-listbox` and `paper-item`
    * to style the control.
    */
   class EnvironmentSelector extends
-    ArcComponents.VariablesConsumerMixin(
+    VariablesConsumerMixin(
     Object) {
+
+    /**
+     * Selected environment.
+     */
+    selected: string|null|undefined;
+    onenvironment: any;
 
     /**
      * Set to make selector's label dissapear after selection has been made.
@@ -59,9 +58,9 @@ declare namespace UiElements {
     noLabelFloat: boolean|null|undefined;
 
     /**
-     * Selected environment.
+     * True when the dropdown is opened. It can be used to change the state.
      */
-    selected: string|null|undefined;
+    opened: any;
     connectedCallback(): void;
     disconnectedCallback(): void;
 
@@ -69,6 +68,7 @@ declare namespace UiElements {
      * Handler for the `selected-environment-changed` event.
      */
     _envChangedHandler(e: CustomEvent|null): void;
+    render(): any;
 
     /**
      * Handler for the `selected` property change
@@ -82,9 +82,14 @@ declare namespace UiElements {
      * @returns Dispatched event
      */
     _dispatchChange(value: String|null): CustomEvent|null;
+    _handleSelection(e: any): void;
+    _handleOpened(e: any): void;
   }
 }
 
-interface HTMLElementTagNameMap {
-  "environment-selector": UiElements.EnvironmentSelector;
+declare global {
+
+  interface HTMLElementTagNameMap {
+    "environment-selector": UiElements.EnvironmentSelector;
+  }
 }
