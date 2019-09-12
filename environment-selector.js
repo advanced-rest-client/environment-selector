@@ -13,9 +13,9 @@ the License.
 */
 import { LitElement, html, css } from 'lit-element';
 import { VariablesConsumerMixin } from '@advanced-rest-client/variables-consumer-mixin/variables-consumer-mixin.js';
-import '@polymer/paper-item/paper-item.js';
-import '@polymer/paper-dropdown-menu/paper-dropdown-menu.js';
-import '@polymer/paper-listbox/paper-listbox.js';
+import '@anypoint-web-components/anypoint-item/anypoint-item.js';
+import '@anypoint-web-components/anypoint-dropdown-menu/anypoint-dropdown-menu.js';
+import '@anypoint-web-components/anypoint-listbox/anypoint-listbox.js';
 /**
  * An element to select current variables environment.
  *
@@ -37,7 +37,7 @@ import '@polymer/paper-listbox/paper-listbox.js';
  *
  * ### Styling
  *
- * Use variables for `paper-dropdown-menu`, `paper-listbox` and `paper-item`
+ * Use variables for `anypoint-dropdown-menu`, `anypoint-listbox` and `anypoint-item`
  * to style the control.
  *
  * @polymer
@@ -54,22 +54,29 @@ class EnvironmentSelector extends VariablesConsumerMixin(LitElement) {
   }
 
   render() {
-    const { noLabelFloat, selected, environments, opened } = this;
+    const { noLabelFloat, selected, environments, opened, compatibility, outlined } = this;
     const hasEnvs = !!(environments && environments.length);
     const ariaOpened = opened === true ? 'true' : 'false';
     return html`
-    <paper-dropdown-menu
-      label="Environment"
+    <anypoint-dropdown-menu
       aria-label="Select one of defined environments in the dropdown"
       aria-expanded="${ariaOpened}"
-      ?no-label-float="${noLabelFloat}"
-      dynamic-align
+      ?nolabelfloat="${noLabelFloat}"
+      dynamicalign
+      ?compatibility="${compatibility}"
+      ?outlined="${outlined}"
       @opened-changed="${this._handleOpened}">
-      <paper-listbox slot="dropdown-content" .selected="${selected}" attr-for-selected="value" @selected-changed="${this._handleSelection}">
-        <paper-item value="default">Default</paper-item>
-        ${hasEnvs ? environments.map((item) => html`<paper-item value="${item.name}">${item.name}</paper-item>`) : undefined}
-      </paper-listbox>
-    </paper-dropdown-menu>`;
+      <label slot="label">Environment</label>
+      <anypoint-listbox
+        slot="dropdown-content"
+        ?compatibility="${compatibility}"
+        .selected="${selected}"
+        attrforselected="value"
+        @selected-changed="${this._handleSelection}">
+        <anypoint-item value="default">Default</anypoint-item>
+        ${hasEnvs ? environments.map((item) => html`<anypoint-item value="${item.name}">${item.name}</anypoint-item>`) : undefined}
+      </anypoint-listbox>
+    </anypoint-dropdown-menu>`;
   }
 
   static get properties() {
@@ -85,7 +92,15 @@ class EnvironmentSelector extends VariablesConsumerMixin(LitElement) {
       /**
        * True when the dropdown is opened. It can be used to change the state.
        */
-      opened: { tyle: Boolean }
+      opened: { tyle: Boolean },
+      /**
+       * Enables compatibility with Anypoint platform
+       */
+      compatibility: { type: Boolean },
+      /**
+       * Enables Material Design Outlined inputs
+       */
+      outlined: { type: Boolean },
     };
   }
 

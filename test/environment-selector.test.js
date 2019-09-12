@@ -1,5 +1,5 @@
 import { fixture, assert, aTimeout } from '@open-wc/testing';
-import sinon from 'sinon/pkg/sinon-esm.js';
+import * as sinon from 'sinon/pkg/sinon-esm.js';
 import '../environment-selector.js';
 
 describe('<environment-selector>', function() {
@@ -153,7 +153,7 @@ describe('<environment-selector>', function() {
     });
 
     it('accepts selection from click', () => {
-      const node = element.shadowRoot.querySelectorAll('paper-item')[1];
+      const node = element.shadowRoot.querySelectorAll('anypoint-item')[1];
       node.click();
       assert.equal(element.selected, 'test');
     });
@@ -205,10 +205,7 @@ describe('<environment-selector>', function() {
   describe('a11y', () => {
     it('is accessible when default', async () => {
       const element = await basicFixture();
-      await assert.isAccessible(element, {
-        // paper-dropdown-menu issue
-        ignoredRules: ['button-name', 'tabindex']
-      });
+      await assert.isAccessible(element);
     });
 
     it('is accessible with values', async () => {
@@ -216,10 +213,7 @@ describe('<environment-selector>', function() {
       element.environments = [{
         name: 'test'
       }];
-      await assert.isAccessible(element, {
-        // paper-dropdown-menu issue
-        ignoredRules: ['button-name', 'tabindex']
-      });
+      await assert.isAccessible(element);
     });
 
     it('is accessible when opened', async () => {
@@ -229,10 +223,7 @@ describe('<environment-selector>', function() {
       }];
       element.opened = true;
       await aTimeout();
-      await assert.isAccessible(element, {
-        // paper-dropdown-menu issue
-        ignoredRules: ['button-name', 'tabindex']
-      });
+      await assert.isAccessible(element);
     });
   });
 });
