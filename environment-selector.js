@@ -40,7 +40,6 @@ import '@anypoint-web-components/anypoint-listbox/anypoint-listbox.js';
  * Use variables for `anypoint-dropdown-menu`, `anypoint-listbox` and `anypoint-item`
  * to style the control.
  *
- * @polymer
  * @customElement
  * @memberof UiElements
  * @demo demo/index.html
@@ -50,6 +49,10 @@ class EnvironmentSelector extends VariablesConsumerMixin(LitElement) {
   static get styles() {
     return css`:host {
       display: block;
+    }
+
+    anypoint-dropdown-menu {
+      margin: 0;
     }`;
   }
 
@@ -65,14 +68,16 @@ class EnvironmentSelector extends VariablesConsumerMixin(LitElement) {
       dynamicalign
       ?compatibility="${compatibility}"
       ?outlined="${outlined}"
-      @opened-changed="${this._handleOpened}">
+      @opened-changed="${this._handleOpened}"
+    >
       <label slot="label">Environment</label>
       <anypoint-listbox
         slot="dropdown-content"
         ?compatibility="${compatibility}"
         .selected="${selected}"
         attrforselected="value"
-        @selected-changed="${this._handleSelection}">
+        @selected-changed="${this._handleSelection}"
+      >
         <anypoint-item value="default">Default</anypoint-item>
         ${hasEnvs ? environments.map((item) => html`<anypoint-item value="${item.name}">${item.name}</anypoint-item>`) : undefined}
       </anypoint-listbox>
